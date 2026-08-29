@@ -5,6 +5,7 @@ by Pacman agents (in searchAgents.py).
 
 import util
 
+
 class SearchProblem:
   """
   This class outlines the structure of a search problem, but doesn't implement
@@ -33,7 +34,7 @@ class SearchProblem:
      
      For a given state, this should return a list of triples, 
      (successor, action, stepCost), where 'successor' is a 
-     successor to the current state, 'action' is the action
+     successor to the current state, 'action' is the action 
      required to get there, and 'stepCost' is the incremental 
      cost of expanding to that successor
      """
@@ -43,90 +44,128 @@ class SearchProblem:
      """
       actions: A list of actions to take
  
-     This method returns the total cost of a particular sequence of actions.  The sequence must
-     be composed of legal moves
+     This method returns the total cost of a particular sequence of actions. 
+     The sequence must be composed of legal moves
      """
      util.raiseNotDefined()
-           
+
 
 def tinyMazeSearch(problem):
   """
   Returns a sequence of moves that solves tinyMaze.  For any other
-  maze, the sequence of moves will be incorrect, so only use this for tinyMaze
+  maze, the sequence will be incorrect, so only use this for tinyMaze
   """
   from game import Directions
   s = Directions.SOUTH
   w = Directions.WEST
-  return  [s,s,w,s,w,w,s,w]
+  return [s, s, w, s, w, w, s, w]
+
 
 def depthFirstSearch(problem):
   """
-  Search the deepest nodes in the search tree first [p 85].
-  
-  Your search algorithm needs to return a list of actions that reaches
-  the goal.  Make sure to implement a graph search algorithm [Fig. 3.7].
-  
-  To get started, you might want to try some of these simple commands to
-  understand the search problem that is being passed in:
-  
-  print "Start:", problem.getStartState()
-  print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-  print "Start's successors:", problem.getSuccessors(problem.getStartState())
+  Search the deepest nodes in the search tree first.
+
+  Uses a Stack, which follows a LIFO policy.
   """
 
-def breadthFirstSearch(problem):
-  "Search the shallowest nodes in the search tree first. [p 81]"
-      
-def uniformCostSearch(problem):
-  "Search the node of least total cost first. "
-  # La frontera guarda los estados que faltan por explorar.
-  frontier = util.PriorityQueue()
+  frontier = util.Stack()
+  start = problem.getStartState()
 
-  # Estado inicial del problema.
-  startState = problem.getStartState()
-
-  # Contador para evitar problemas cuando dos nodos tienen la misma prioridad.
-  counter = 0
-
-  # Cada elemento contiene:
-  # contador, estado, acciones realizadas y costo acumulado.
-  frontier.push((counter, startState, [], 0), 0)
-
-  # Guarda el menor costo conocido para llegar a cada estado.
-  bestCosts = {startState: 0}
+  frontier.push((start, []))
+  visited = set()
 
   while not frontier.isEmpty():
 
-    # Se extrae el nodo con menor costo acumulado.
-    _, state, actions, cost = frontier.pop()
+    state, actions = frontier.pop()
 
-    # Ignora una entrada si ya se encontró un camino más barato.
-    if cost != bestCosts.get(state):
+    if state in visited:
       continue
 
-    # Si se alcanzó el objetivo, retorna el camino.
+    visited.add(state)
+
     if problem.isGoalState(state):
       return actions
 
-    # Explora los movimientos posibles desde el estado actual.
+    for successor, action, stepCost in problem.getSuccessors(state):
+      if successor not in visited:
+        frontier.push((successor, actions + [action]))
+
+  return []
+
+
+def breadthFirstSearch(problem):
+  """
+  Search the shallowest nodes in the search tree first.
+
+  Uses a Queue, which follows a FIFO policy.
+  """
+
+  frontier = util.Queue()
+  start = problem.getStartState()
+
+  frontier.push((start, []))
+  visited = set()
+
+  while not frontier.isEmpty():
+
+    state, actions = frontier.pop()
+
+    if state in visited:
+      continue
+
+    visited.add(state)
+
+    if problem.isGoalState(state):
+      return actions
+
+    for successor, action, stepCost in problem.getSuccessors(state):
+      if successor not in visited:
+        frontier.push((successor, actions + [action]))
+
+  return []
+
+
+def uniformCostSearch(problem):
+  """
+  Search the node of least total cost first.
+
+  Uses a PriorityQueue where the priority is the accumulated
+  path cost g(n).
+  """
+
+  frontier = util.PriorityQueue()
+  start = problem.getStartState()
+
+  # (state, actions, cost)
+  frontier.push((start, [], 0), 0)
+
+  visited = set()
+
+  while not frontier.isEmpty():
+
+    state, actions, cost = frontier.pop()
+
+    if state in visited:
+      continue
+
+    visited.add(state)
+
+    if problem.isGoalState(state):
+      return actions
+
     for successor, action, stepCost in problem.getSuccessors(state):
 
-      newCost = cost + stepCost
+      if successor not in visited:
 
-      # Solamente guarda el sucesor si encontró un camino más barato.
-      if newCost < bestCosts.get(successor, float('inf')):
+        newCost = cost + stepCost
 
-        bestCosts[successor] = newCost
-        newActions = actions + [action]
-
-        counter += 1
         frontier.push(
-          (counter, successor, newActions, newCost),
-          newCost
+            (successor, actions + [action], newCost),
+            newCost
         )
 
-  # Se retorna una lista vacía si no existe solución.
   return []
+
 
 def nullHeuristic(state, problem=None):
   """
@@ -135,73 +174,61 @@ def nullHeuristic(state, problem=None):
   """
   return 0
 
+
 def aStarSearch(problem, heuristic=nullHeuristic):
-  "Search the node that has the lowest combined cost and heuristic first."
+  """
+  Search the node that has the lowest combined cost and heuristic first.
 
-  # Cola de prioridad utilizada como frontera.
+  f(n) = g(n) + h(n)
+
+  where:
+    g(n) = cost accumulated from the start state
+    h(n) = estimated cost from the current state to the goal
+  """
+
   frontier = util.PriorityQueue()
+  start = problem.getStartState()
 
-  # Estado inicial del problema.
-  startState = problem.getStartState()
+  initialHeuristic = heuristic(start, problem)
 
-  # Contador para diferenciar nodos con la misma prioridad.
-  counter = 0
-
-  # El costo real inicial g(n) es 0.
-  startCost = 0
-
-  # La prioridad inicial es:
-  # f(n) = g(n) + h(n)
-  startPriority = startCost + heuristic(startState, problem)
-
+  # (state, actions, cost)
   frontier.push(
-    (counter, startState, [], startCost),
-    startPriority
+      (start, [], 0),
+      initialHeuristic
   )
 
-  # Menor costo conocido para llegar a cada estado.
-  bestCosts = {startState: 0}
+  visited = set()
 
   while not frontier.isEmpty():
 
-    # Extraer el nodo con menor f(n).
-    _, state, actions, cost = frontier.pop()
+    state, actions, cost = frontier.pop()
 
-    # Ignorar entradas para las que ya existe un camino más barato.
-    if cost != bestCosts.get(state):
+    if state in visited:
       continue
 
-    # Comprobar si se alcanzó el objetivo.
+    visited.add(state)
+
     if problem.isGoalState(state):
       return actions
 
-    # Obtener los sucesores del estado actual.
     for successor, action, stepCost in problem.getSuccessors(state):
 
-      # Calcular el nuevo costo real g(n).
-      newCost = cost + stepCost
+      if successor not in visited:
 
-      # Comprobar si este camino mejora el costo conocido.
-      if newCost < bestCosts.get(successor, float('inf')):
+        newCost = cost + stepCost
 
-        bestCosts[successor] = newCost
-        newActions = actions + [action]
+        h = heuristic(successor, problem)
 
-        # Calcular la prioridad de A*:
-        # f(n) = g(n) + h(n)
-        priority = newCost + heuristic(successor, problem)
-
-        counter += 1
+        priority = newCost + h
 
         frontier.push(
-          (counter, successor, newActions, newCost),
-          priority
+            (successor, actions + [action], newCost),
+            priority
         )
 
-  # Retornar una lista vacía si no existe solución.
   return []
-    
-  
+
+
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
