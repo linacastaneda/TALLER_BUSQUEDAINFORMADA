@@ -676,14 +676,14 @@ class FoodSearchProblem:
 class AStarFoodSearchAgent(SearchAgent):
   """
   A SearchAgent for FoodSearchProblem using A*
-  and foodHeuristic.
+  and foodHeuristicV2 (MST con caché).
   """
   
   def __init__(self):
     
     self.searchFunction = lambda prob: search.aStarSearch(
         prob,
-        foodHeuristic
+        foodHeuristicV2
     )
     
     self.searchType = FoodSearchProblem
@@ -691,14 +691,71 @@ class AStarFoodSearchAgent(SearchAgent):
 
 def foodHeuristic(state, problem):
   """
-  Heurística para FoodSearchProblem.
-
-  Esta función corresponde a una actividad posterior.
+  Heurística 1: Max Manhattan distance to any remaining food.
+  Admisible: el costo mínimo es al menos la distancia al alimento más lejano.
   """
-  
   position, foodGrid = state
+  foodList = foodGrid.asList()
   
-  return 0
+  if not foodList:
+    return 0
+  
+  from util import manhattanDistance
+  return max(manhattanDistance(position, food) for food in foodList)
+
+
+def foodHeuristicV2(state, problem):
+  """
+  Heurística 2: Minimum Spanning Tree (MST) approximation con caché.
+  Admisible: MST es cota inferior del camino que visita todos los alimentos.
+  Usa problem.heuristicInfo para cachear distancias entre pares.
+  """
+  position, foodGrid = state
+  foodList = foodGrid.asList()
+  
+  if not foodList:
+    return 0
+  
+  from util import manhattanDistance
+  
+  # Cache distancias entre pares de alimentos
+  if 'foodDistances' not in problem.heuristicInfo:
+    distances = {}
+    for i, f1 in enumerate(foodList):
+      for j, f2 in enumerate(foodList):
+        if i < j:
+          d = manhattanDistance(f1, f2)
+          distances[(f1, f2)] = d
+          distances[(f2, f1)] = d
+    problem.heuristicInfo['foodDistances'] = distances
+  
+  distances = problem.heuristicInfo['foodDistances']
+  
+  # Distancia al alimento más cercano
+  minDistToFood = min(manhattanDistance(position, food) for food in foodList)
+  
+  # MST aproximado (Prim's algorithm)
+  if len(foodList) == 1:
+    mstCost = 0
+  else:
+    remaining = set(foodList)
+    mstCost = 0
+    current = foodList[0]
+    remaining.remove(current)
+    
+    while remaining:
+      minDist = float('inf')
+      nearest = None
+      for food in remaining:
+        for mstFood in [f for f in foodList if f not in remaining]:
+          d = distances.get((food, mstFood), manhattanDistance(food, mstFood))
+          if d < minDist:
+            minDist = d
+            nearest = food
+      mstCost += minDist
+      remaining.remove(nearest)
+  
+  return minDistToFood + mstCost
 
 
 class ClosestDotSearchAgent(SearchAgent):
