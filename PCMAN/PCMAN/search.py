@@ -137,7 +137,8 @@ def uniformCostSearch(problem):
   start = problem.getStartState()
 
   # (state, actions, cost)
-  frontier.push((start, [], 0), 0)
+  counter = 0
+  frontier.push((start, [], 0), (0, counter))
 
   visited = set()
 
@@ -158,10 +159,11 @@ def uniformCostSearch(problem):
       if successor not in visited:
 
         newCost = cost + stepCost
+        counter += 1
 
         frontier.push(
             (successor, actions + [action], newCost),
-            newCost
+            (newCost, counter)
         )
 
   return []
@@ -192,9 +194,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
   initialHeuristic = heuristic(start, problem)
 
   # (state, actions, cost)
+  counter = 0
   frontier.push(
       (start, [], 0),
-      initialHeuristic
+      (initialHeuristic, counter)
   )
 
   visited = set()
@@ -221,9 +224,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
         priority = newCost + h
 
+        counter += 1
         frontier.push(
             (successor, actions + [action], newCost),
-            priority
+            (priority, counter)
         )
 
   return []

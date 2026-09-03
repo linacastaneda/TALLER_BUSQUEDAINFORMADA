@@ -661,7 +661,16 @@ class Game:
           self._agentCrash(agentIndex)
           return
       else:
-        self.state = self.state.generateSuccessor( agentIndex, action )
+        try:
+          self.state = self.state.generateSuccessor( agentIndex, action )
+        except Exception as data:
+          if "Illegal action" in str(data):
+            # Search path exhausted — end the game gracefully
+            print("Search agent finished. " + str(data))
+            self.gameOver = True
+            break
+          else:
+            raise
 
       # Change the display
       self.display.update( self.state.data )
