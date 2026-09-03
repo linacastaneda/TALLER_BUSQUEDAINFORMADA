@@ -2,40 +2,45 @@
 
 ## tinyMaze (PositionSearchProblem)
 
-Método | Costo | Expandidos | Tiempo | Óptimo | Complejidad en memoria
---- | --- | --- | --- | --- | ---
-UCS | 10 | 18 | 0.0s | Sí | O(b^d)
-A* + h=0 (nullHeuristic) | 10 | 18 | 0.0s | Sí | O(b^d)
-A* + Manhattan | 10 | 10 | 0.0s | Sí | O(b^d)
-A* + Euclidiana | 10 | 10 | 0.0s | Sí | O(b^d)
+## tinyMaze (PositionSearchProblem)
+
+| Método | Costo | Expandidos | Tiempo promedio | Memoria pico promedio | Óptimo |
+|--------|-------|------------|-----------------|-----------------------|--------|
+| UCS | 10 | 21 | 0.001985 s | 7.81 KB | Sí |
+| A* + h=0 (nullHeuristic) | 10 | Pendiente | Pendiente | Pendiente | Sí |
+| A* + Manhattan | 10 | 10 | 0.001064 s | 3.91 KB | Sí |
+| A* + Euclidiana | 10 | 10 | 0.001023 s | 4.05 KB | Sí |
 
 ## tinyCorners (CornersProblem)
 
-| Método | Costo | Expandidos | Tiempo | Óptimo |
-|--------|-------|------------|--------|--------|
-| UCS | 22 | 377 | 0.0s | Sí |
-| A* + h=0 (nullHeuristic) | 22 | 377 | 0.0s | Sí |
-| A* + cornersHeuristic (propuesta) | 22 | 124 | 0.0s | Sí |
+## tinyCorners (CornersProblem)
 
+| Método | Costo | Expandidos | Tiempo promedio | Memoria pico promedio | Óptimo |
+|--------|-------|------------|-----------------|-----------------------|--------|
+| UCS | 22 | 374 | 0.029891 s | 139.06 KB | Sí |
+| A* + h=0 (nullHeuristic) | 22 | Pendiente | Pendiente | Pendiente | Sí |
+| A* + cornersHeuristic | 22 | 165 | 0.013203 s | 61.55 KB | Sí |
 ## FoodSearchProblem
 
 ### tinySearch (1 food)
 
-| Método | Costo | Expandidos | Tiempo | Óptimo |
-|--------|-------|------------|--------|--------|
-| UCS | 8 | 16 | 0.0s | Sí |
-| A* + h=0 | 8 | 16 | 0.0s | Sí |
-| A* + Heurística 1 (Max Manhattan) | 8 | 8 | 0.0s | Sí |
-| A* + Heurística 2 (MST) | 8 | 8 | 0.0s | Sí |
+## tinySearch (FoodSearchProblem)
+
+| Método | Costo | Expandidos | Tiempo promedio | Memoria pico promedio | Óptimo |
+|--------|-------|------------|-----------------|-----------------------|--------|
+| UCS | 8 | 16 | 0.005793 s | 31.29 KB | Sí |
+| A* + h=0 (nullHeuristic) | 8 | Pendiente | Pendiente | Pendiente | Sí |
+| A* + Max Manhattan | 8 | 8 | 0.003927 s | 19.78 KB | Sí |
+| A* + MST | 8 | 8 | 0.002539 s | 19.78 KB | Sí |
 
 ### testClassic (5 foods)
 
-| Método | Costo | Expandidos | Tiempo | Óptimo | Victoria |
-|--------|-------|------------|--------|--------|----------|
-| UCS | 16 | 2,598 | 0.2s | Sí | No |
-| A* + h=0 | 16 | 2,598 | 0.2s | Sí | No |
-| A* + Heurística 1 (Max Manhattan) | 16 | 702 | 0.0s | Sí | No |
-| **A* + Heurística 2 (MST)** | **16** | **111** | **0.0s** | **Sí** | **Sí** |
+Método | Costo | Expandidos | Tiempo | Óptimo | Victoria | Complejidad en memoria
+--- | --- | --- | --- | --- | --- | ---
+UCS | 16 | 2,598 | 0.2s | Sí | No | O(b^d)
+A* + h=0 | 16 | 2,598 | 0.2s | Sí | No | O(b^d)
+A* + Heurística 1 (Max Manhattan) | 16 | 702 | 0.0s | Sí | No | O(b^d)
+A* + Heurística 2 (MST)* | 16 | 111 | 0.0s | Sí | Sí | O(b^d)
 
 ### smallClassic (muchos foods) - Límite 120s
 
