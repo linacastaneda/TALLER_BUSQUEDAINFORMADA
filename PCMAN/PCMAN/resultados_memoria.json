@@ -1,0 +1,82 @@
+[
+    {
+        "nombre": "UCS - tinyMaze",
+        "memoria_min": 7.8125,
+        "memoria_max": 7.8125,
+        "memoria_promedio": 7.8125,
+        "tiempo_promedio": 0.0005885200342163443,
+        "nodos_promedio": 21,
+        "costo": 10,
+        "ejecuciones_validas": 10
+    },
+    {
+        "nombre": "A* Manhattan - tinyMaze",
+        "memoria_min": 3.90625,
+        "memoria_max": 3.90625,
+        "memoria_promedio": 3.90625,
+        "tiempo_promedio": 0.00037972000427544117,
+        "nodos_promedio": 10,
+        "costo": 10,
+        "ejecuciones_validas": 10
+    },
+    {
+        "nombre": "A* Euclidiana - tinyMaze",
+        "memoria_min": 4.046875,
+        "memoria_max": 4.046875,
+        "memoria_promedio": 4.046875,
+        "tiempo_promedio": 0.0004553800215944648,
+        "nodos_promedio": 10,
+        "costo": 10,
+        "ejecuciones_validas": 10
+    },
+    {
+        "nombre": "UCS - tinyCorners",
+        "memoria_min": 139.0625,
+        "memoria_max": 139.0625,
+        "memoria_promedio": 139.0625,
+        "tiempo_promedio": 0.01442643003538251,
+        "nodos_promedio": 374,
+        "costo": 22,
+        "ejecuciones_validas": 10
+    },
+    {
+        "nombre": "A* cornersHeuristic - tinyCorners",
+        "memoria_min": 61.5546875,
+        "memoria_max": 61.5546875,
+        "memoria_promedio": 61.5546875,
+        "tiempo_promedio": 0.007107919966802001,
+        "nodos_promedio": 165,
+        "costo": 22,
+        "ejecuciones_validas": 10
+    },
+    {
+        "nombre": "UCS - tinySearch",
+        "memoria_min": 31.2890625,
+        "memoria_max": 31.2890625,
+        "memoria_promedio": 31.2890625,
+        "tiempo_promedio": 0.0031602200120687484,
+        "nodos_promedio": 16,
+        "costo": 8,
+        "ejecuciones_validas": 10
+    },
+    {
+        "nombre": "A* Max Manhattan - tinySearch",
+        "memoria_min": 19.78125,
+        "memoria_max": 19.78125,
+        "memoria_promedio": 19.78125,
+        "tiempo_promedio": 0.0025309100048616527,
+        "nodos_promedio": 8,
+        "costo": 8,
+        "ejecuciones_validas": 10
+    },
+    {
+        "nombre": "A* MST - tinySearch",
+        "memoria_min": 19.78125,
+        "memoria_max": 19.78125,
+        "memoria_promedio": 19.78125,
+        "tiempo_promedio": 0.002436199993826449,
+        "nodos_promedio": 8,
+        "costo": 8,
+        "ejecuciones_validas": 10
+    }
+]
