@@ -2,12 +2,12 @@
 
 ## tinyMaze (PositionSearchProblem)
 
-| Método | Costo | Expandidos | Tiempo | Óptimo |
-|--------|-------|------------|--------|--------|
-| UCS | 10 | 18 | 0.0s | Sí |
-| A* + h=0 (nullHeuristic) | 10 | 18 | 0.0s | Sí |
-| A* + Manhattan | 10 | 10 | 0.0s | Sí |
-| A* + Euclidiana | 10 | 10 | 0.0s | Sí |
+Método | Costo | Expandidos | Tiempo | Óptimo | Complejidad en memoria
+--- | --- | --- | --- | --- | ---
+UCS | 10 | 18 | 0.0s | Sí | O(b^d)
+A* + h=0 (nullHeuristic) | 10 | 18 | 0.0s | Sí | O(b^d)
+A* + Manhattan | 10 | 10 | 0.0s | Sí | O(b^d)
+A* + Euclidiana | 10 | 10 | 0.0s | Sí | O(b^d)
 
 ## tinyCorners (CornersProblem)
 
